@@ -1,3 +1,4 @@
+#!/bin/sh
 
 # install necessary packages
 echo "Installing Linux packages..."

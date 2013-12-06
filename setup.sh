@@ -17,8 +17,12 @@ make
 sudo make install
 cd ..
 
-# get pibeacon script
+# get pibeacon scripts
+echo "Installng PiBeacon..."
 git clone https://github.com/tonyd256/pibeacon-scripts.git
 cd pibeacon-scripts
 cp run_beacon.sh /etc/network/if-up.d/
+ruby beacon.rb
+cd ..
+echo "Done!"
 

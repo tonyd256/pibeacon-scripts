@@ -58,9 +58,7 @@ else
   req = Net::HTTP::Put.new(uri.path, initheader = {'Content-Type' => 'application/json'})
   req.add_field('authentication-token', @config[:token])
   req.body = @data
-  
-  res = https.request(req)
-  puts res.body
+  https.request(req)
 end
 
 if (system("hciconfig"))

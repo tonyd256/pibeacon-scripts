@@ -8,6 +8,7 @@ require 'socket'
 
 path = ENV['HOME'] + '/.pibeacon/config'
 apiHost = 'https://pibeacon.herokuapp.com'
+pibeaconUUID = '3E 7E 85 35 7B 24 4C 25 9E 5D 94 AD C9 96 8F 20'
 
 if (File.exists?(path))
   @config = YAML::load(File.open(path))
@@ -60,4 +61,18 @@ else
   
   res = https.request(req)
   puts res.body
+end
+
+if (system("hciconfig"))
+  idBytes = [
+    "%02X" % (@config[:id] >> 24),
+    "%02X" % ((@config[:id] >> 16) & 0xFF),
+    "%02X" % ((@config[:id] >> 8) & 0xFF),
+    "%02X" % (@config[:id] & 0xFF)
+  ]
+  system("sudo hciconfig hci0 down")
+  system("sudo hciconfig hci0 up")
+  system("sudo hciconfig hci0 noscan")
+  system("sudo hcitool -i hci0 cmd 0x08 0x0008 1e 02 01 1a 1a ff 4c 00 02 15 #{pibeaconUUID} #{idBytes * " "} c5")
+  system("sudo hciconfig hci0 leadv 0")
 end
